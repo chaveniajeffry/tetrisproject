@@ -7,6 +7,7 @@ let nextRandom = 0
 let timerId
 let counter = 0
 let score = 0
+let isGameOver = false
 //Forming tetriminoes and thier rotation
 const lTetrimino = [
     [1, width+1, width*2+1, 2],
@@ -82,18 +83,20 @@ function removeTetrimino(){
 
 //assign function to keycode/keypress
 function control(e){
-    if(e.keyCode === 37){
-        moveTetriminoToTheLeft()
-    }else if(e.keyCode === 38){
-        rotateTetrimino()
-    }else if(e.keyCode === 39){
-        moveTetriminoToTheRight()
-    }else if(e.keyCode === 40){
-        moveTetriminoDown()
+    if(!isGameOver){
+        if(e.keyCode === 37){
+            moveTetriminoToTheLeft()
+        }else if(e.keyCode === 38){
+            rotateTetrimino()
+        }else if(e.keyCode === 39){
+            moveTetriminoToTheRight()
+        }else if(e.keyCode === 40){
+            moveTetriminoDown()
+        }
     }
 }
-
 document.addEventListener('keyup', control)
+
 
 function moveTetriminoDown(){
     removeTetrimino()
@@ -114,6 +117,7 @@ function freezeTetriminoes(){
         makeTetrimino()
         displayShape()
         addScore()
+        gameOver()
       }
 }
 
@@ -215,3 +219,12 @@ function addScore(){
         }
     }
 }
+//game over
+function gameOver() {
+    if(currentTetrimino.some(index => squares[currentPosition + index].classList.contains('taken'))) {
+      scoreDisplay.innerHTML = 'end'
+      clearInterval(timerId)
+      isGameOver = true
+      console.log(isGameOver)
+    }
+  }
